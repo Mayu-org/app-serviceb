@@ -26,7 +26,7 @@ jobs:
 
     - name: Build with Maven
       run: |
-        cd servicea
+        cd serviceb
         mvn clean package
 
     - name: Log in to Docker Hub
