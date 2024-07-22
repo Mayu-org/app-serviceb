@@ -33,7 +33,7 @@ jobs:
       run: echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
 
     - name: Build Docker image for Service A
-      run: docker build -t $DOCKER_HUB_USERNAME/app-serviceb:latest ./servicea -f ./serviceb/src/build/Dockerfile
+      run: docker build -t $DOCKER_HUB_USERNAME/app-serviceb:latest ./serviceb -f ./serviceb/src/build/Dockerfile
 
     - name: Push Docker image for Service A
       run: docker push $DOCKER_HUB_USERNAME/app-serviceb:latest
