@@ -16,6 +16,6 @@ public class ServiceBApplication {
 class ServiceBController {
     @GetMapping("/info")
     public String getInfo() {
-        return "Hello from Service B, this is a test!";
+        return "Hello from Service B, this is a test! Making a change :)";
     }
 }
