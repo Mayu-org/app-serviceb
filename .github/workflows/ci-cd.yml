@@ -1,0 +1,57 @@
+name: CI/CD Pipeline for Service B
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    env:
+      DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+      DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Build with Maven
+      run: |
+        cd servicea
+        mvn clean package
+
+    - name: Log in to Docker Hub
+      run: echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+
+    - name: Build Docker image for Service A
+      run: docker build -t $DOCKER_HUB_USERNAME/app-serviceb:latest ./servicea -f ./serviceb/src/build/Dockerfile
+
+    - name: Push Docker image for Service A
+      run: docker push $DOCKER_HUB_USERNAME/app-serviceb:latest
+
+    #- name: Set up kubectl
+    #  run: |
+    #    mkdir -p $HOME/.kube
+    #    echo "$KUBE_CONFIG_DATA" | base64 --decode > $HOME/.kube/config
+    #    kubectl config
+        
+    - name: Create namespace if not exists
+      run: |
+        kubectl get namespace myapp1 || kubectl create namespace myapp1
+
+    - name: Delete existing deployment
+      run: | 
+        kubectl delete -f k8s/service-b-deployment.yaml --ignore-not-found
+      
+    - name: Deploy to Kubernetes
+      run: |
+        kubectl apply -f k8s/service-b-deployment.yaml
