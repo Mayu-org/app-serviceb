@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Logger; 
 
 @SpringBootApplication
 public class ServiceBApplication {
@@ -30,6 +30,6 @@ class ServiceBController {
         String timestamp = LocalDateTime.now().format(formatter);
         logger.debug("Sending response to Service A at : {}", timestamp);
         logger.info("Sending info entry here while responding to Service a at {}",timestamp);
-        return "Hello from Service B";
+        return "Hello from Service B"; 
     }
 }
