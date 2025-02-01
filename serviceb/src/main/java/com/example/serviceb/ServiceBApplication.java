@@ -1,7 +1,7 @@
 package com.example.serviceb;
 
 
-import io.opentelemetry.instrumentation.annotations.WithSpan;
+//import io.opentelemetry.instrumentation.annotations.WithSpan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ class ServiceBController {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     @GetMapping("/info")
-    @WithSpan
+ //   @WithSpan
     public String getInfo() {
         String timestamp = LocalDateTime.now().format(formatter);
         logger.debug("Sending response to Service A at : {}", timestamp);
